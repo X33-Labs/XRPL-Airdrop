@@ -1,0 +1,21 @@
+﻿{
+  "WebSocket_URL": "wss://s.altnet.rippletest.net/", //Main Net: 	wss://s1.ripple.com/  wss://xrplcluster.com/ ws://xrplive.com:48212/   Test Net: wss://s.altnet.rippletest.net/
+  "Issuer_Address": "rHUVYr1hyj9aW9HwvcDKcLGnx6vawGtnTZ", //Address that issued your token
+  "Airdrop_Address": "rwKmDNFpB1BfNpAKwZE2NVFe2xsM3JuPFd", //Address that holds the tokens for your airdrop
+  "Airdrop_Address_Secret": "spqqN8x7yc1v9bV5Zzgk32ghv3oJm", //Secret to the airdrop address. KEEP THIS PRIVATE AND SAFE!
+  "Currency_Code": "54455354434F494E000000000000000000000000", //3 character code or 160-bit hexadecimal string (40 characters)
+  "Airdrop_Token_Amt": 10, //amount to send in each air drop txn
+  "Exclude_Bots": false, //This will only work if you've pulled in the XRP Forensics data. Excludes Bots/Peel accounts. Contact for more info: https://xrplorer.com/contact
+  "XRPForensics_URL": "https://api.xrplorer.com/custom/airdropfarmingaccounts", //Contact for more info: https://xrplorer.com/contact
+  "XRPForensics_API_Key": "", //Contact for more info: https://xrplorer.com/contact
+  "AccountLinesThrottle": 10, //Number of seconds between request calls. Recommended not to change. Lower settings could result in a block from web service hosts.
+  "TxnThrottle": 1, //Number of seconds between request calls. Recommended not to change. Lower settings could result in a block from web service hosts.
+  "Exclude_if_user_has_a_balance": false, //This excludes accounts that already hold a balance of the token (good for filtering out team wallet trustlines)
+  "Include_only_holders": false, //This setting if true will only airdrop if the user holds a balance. cannot use EXCLUDE_IF_USER_HAS_A_BALANCE and INCLUDE_ONLY_IF_HOLDER interchangably. one has to be true and the other has to be false.
+  "Include_only_holders_num_Tokens": 0, //Minimum number of tokens to hold in order to be eligible for the airdrop. Only used if Include_only_holders = true
+  "Max_number_of_trustlines": 500, //Number of trustlines to airdrop to. 
+  "FeeMultiplier": 1.1, //How many times above average fees to pay for reliable transactions
+  "MaximumFee": 5000, //Maximum number of drops willing to pay for each transaction
+  "XRPLVerify_Enabled": true,
+  "XRLVerify_Password": ""
+}

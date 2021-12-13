@@ -1,0 +1,17 @@
+﻿CREATE TABLE IF NOT EXISTS Airdrop (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+   	address TEXT NOT NULL,
+	balance NUMERIC NOT NULL,
+	dropped INTEGER DEFAULT 0,
+	datetime NUMERIC DEFAULT 0,
+	txn_message TEXT DEFAULT '',
+	txn_detail TEXT DEFAULT '',
+    txn_hash TEXT DEFAULT '',
+	txn_verified INTEGER DEFAULT 0,
+	xrpl_verified INTEGER DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS ExclusionList (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+   	address TEXT NOT NULL,
+	type TEXT NOT NULL
+);
