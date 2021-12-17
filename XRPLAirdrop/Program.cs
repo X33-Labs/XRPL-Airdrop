@@ -19,7 +19,7 @@ namespace XRPLAirdrop
             config = new Settings();
             screen = new ConsoleScreen(config);
             xrpl = new XRPL(config);
-            spinner = new Spinner(0, 26);
+            spinner = new Spinner(0, 23);
             engine = new AirdropEngine(config, spinner);
             verify = new Verify(config, spinner);
             while (showMenu)
@@ -32,20 +32,11 @@ namespace XRPLAirdrop
         {
             string VersionNumber = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             string asciiTop = File.ReadAllText(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Menu_ascii.txt"));
+            string menuSelection = File.ReadAllText(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Menu_selection.txt"));
             Console.Clear();
             Console.WriteLine(asciiTop);
             Console.WriteLine("v" + VersionNumber);
-            Console.WriteLine("");
-            Console.WriteLine("Choose an option:");
-            Console.WriteLine("1) Update Trustline accounts");
-            Console.WriteLine("2) Update XRPforensics data (optional). deprecated on 1/1/22");
-            Console.WriteLine("3) View Current Settings");
-            Console.WriteLine("4) Start Airdrop");
-            Console.WriteLine("5) Export Report");
-            Console.WriteLine("6) Requeue Address");
-            Console.WriteLine("7) View Current Network Fees");
-            Console.WriteLine("8) Re-verify failed Transaction Checks");
-            Console.WriteLine("9) Exit");
+            Console.WriteLine(menuSelection);
 
             Console.Write("\r\nSelect an option: ");
 
@@ -104,6 +95,29 @@ namespace XRPLAirdrop
                     await engine.VerifyPendingFailed();
                     return true;
                 case "9":
+                    Console.WriteLine("*** Are you sure you want to do this? *** Y or N");
+                    switch (Console.ReadLine())
+                    {
+                        case "Y":
+                            await engine.CreateNewToken();
+                            return true;
+                        case "N":
+                            return true;
+                    }
+                    return true;
+                case "10":
+                    Console.WriteLine("*** Are you sure you want to do this? *** ");
+                    Console.WriteLine("*** Your issuer account configured as " + config.issuerAddress + " will be blackholed. *** ");
+                    Console.WriteLine("*** To confirm, please type \"blackhole\" and press enter. *** ");
+                    switch (Console.ReadLine())
+                    {
+                        case "blackhole":
+                            await engine.BlackholeIssuerAccount();
+                            return true;
+                        default:
+                            return true;
+                    }
+                case "11":
                     return false;
                 default:
                     return true;

@@ -1,9 +1,13 @@
 ﻿{
   "WebSocket_URL": "wss://s.altnet.rippletest.net/", //Main Net: 	wss://s1.ripple.com/  wss://xrplcluster.com/ ws://xrplive.com:48212/   Test Net: wss://s.altnet.rippletest.net/
-  "Issuer_Address": "rHUVYr1hyj9aW9HwvcDKcLGnx6vawGtnTZ", //Address that issued your token
-  "Airdrop_Address": "rwKmDNFpB1BfNpAKwZE2NVFe2xsM3JuPFd", //Address that holds the tokens for your airdrop
-  "Airdrop_Address_Secret": "spqqN8x7yc1v9bV5Zzgk32ghv3oJm", //Secret to the airdrop address. KEEP THIS PRIVATE AND SAFE!
-  "Currency_Code": "54455354434F494E000000000000000000000000", //3 character code or 160-bit hexadecimal string (40 characters)
+  "Issuer_Address": "rDkxjhLrC845xerdYqTgCV9EyMdFf7EVdK", //Address that issued your token
+  "Issuer_Address_Secret": "", //Only Needed if Blackholing an issuer account KEEP THIS PRIVATE AND SAFE!
+  "Airdrop_Address": "rs5fac7A98uRU5MYUP6MWFiXnSg22QkqRD", //Address that holds the tokens for your airdrop
+  "Airdrop_Address_Secret": "", //Secret to the airdrop address. KEEP THIS PRIVATE AND SAFE!
+  "Currency_Code": "HELLOWORLD", //Name of your token
+  "Domain": "pixelaperowboat.club", //Optional (Can be used when issuing a new currency)
+  "Supply": 1000000000, //Supply of your token (only used when created a new token)
+  "TransferFee": 0, //Usually not applicable. TransferRate of your token
   "Airdrop_Token_Amt": 10, //amount to send in each air drop txn
   "Exclude_Bots": false, //This will only work if you've pulled in the XRP Forensics data. Excludes Bots/Peel accounts. Contact for more info: https://xrplorer.com/contact
   "XRPForensics_URL": "https://api.xrplorer.com/custom/airdropfarmingaccounts", //Contact for more info: https://xrplorer.com/contact
@@ -16,6 +20,6 @@
   "Max_number_of_trustlines": 500, //Number of trustlines to airdrop to. 
   "FeeMultiplier": 1.1, //How many times above average fees to pay for reliable transactions
   "MaximumFee": 5000, //Maximum number of drops willing to pay for each transaction
-  "XRPLVerify_Enabled": true,
+  "XRPLVerify_Enabled": false,
   "XRLVerify_Password": ""
 }

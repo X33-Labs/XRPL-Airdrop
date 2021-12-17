@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
+using System.Text;
 
 namespace XRPLAirdrop
 {
@@ -40,5 +41,47 @@ namespace XRPLAirdrop
             return dateTime;
         }
 
+        public static string ConvertHex(String hexString)
+        {
+            try
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(hexString);
+                return Convert.ToHexString(bytes);
+            }
+            catch (Exception) { return ""; }
+        }
+
+        public static string HexToAscii(String hexString)
+        {
+            try
+            {
+                string ascii = string.Empty;
+
+                for (int i = 0; i < hexString.Length; i += 2)
+                {
+                    String hs = string.Empty;
+
+                    hs = hexString.Substring(i, 2);
+                    uint decval = System.Convert.ToUInt32(hs, 16);
+                    char character = System.Convert.ToChar(decval);
+                    ascii += character;
+
+                }
+
+                return ascii;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            return string.Empty;
+        }
+
+        public static string AddZeros(string s, int totalZeros)
+        {
+            while (s.Length < 40)
+            {
+                s = s + "0";
+            }
+            return s;
+        }
     }
 }

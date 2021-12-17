@@ -20,15 +20,15 @@ namespace XRPLAirdrop
                 int totalAirdropRecords = db.GetTotalAirdropRecords();
                 int totalExclusionRecords = db.GetTotalExclusionListRecords();
 
-                Console.SetCursorPosition(0, 28);
+                Console.SetCursorPosition(0, 24);
                 Console.WriteLine("Database Stats:");
                 Console.WriteLine("Total Trustline Records: " + totalAirdropRecords);
                 Console.WriteLine("Total Exclusion List Records: " + totalExclusionRecords);
                 Console.WriteLine(" ");
                 Console.WriteLine("Issuer Account: " + config.issuerAddress);
                 Console.WriteLine("Airdrop Account: " + config.airdropAddress);
-                Console.WriteLine("Airdrop Amt per address: " + config.airdropTokenAmt + " " + Settings.ConvertHex(config.currencyCode));
-                Console.WriteLine("Currency: " + config.currencyCode + "(" + Settings.ConvertHex(config.currencyCode) + ")");
+                Console.WriteLine("Airdrop Amt per address: " + config.airdropTokenAmt + " " + Utils.HexToAscii(config.currencyCode));
+                Console.WriteLine("Currency: " + config.currencyCode + "(" + Utils.HexToAscii(config.currencyCode) + ")");
                 Console.WriteLine("Exclude Bots: " + config.excludeBots.ToString());
                 Console.WriteLine("Amount of Trustlines: " + config.numberOfTrustlines);
                 Console.WriteLine("Include Only Holders: " + config.includeOnlyIfHolder);
@@ -42,7 +42,7 @@ namespace XRPLAirdrop
             }
         }
 
-        public void ClearConsoleLines(int startingPosition = 27)
+        public void ClearConsoleLines(int startingPosition = 23)
         {
             Console.SetCursorPosition(0, startingPosition);
             startingPosition++;
@@ -66,7 +66,7 @@ namespace XRPLAirdrop
 
         public void WriteMessages(params string[] messages)
         {
-            int startPos = 28;
+            int startPos = 24;
             foreach (string s in messages)
             {
                 Console.SetCursorPosition(0, startPos);
@@ -77,10 +77,10 @@ namespace XRPLAirdrop
 
         public void InitScreen(ref Spinner spinner, params string[] messages)
         {
-            Console.SetCursorPosition(0, 27);
-            spinner = new Spinner(0, 27);
+            Console.SetCursorPosition(0, 23);
+            spinner = new Spinner(0, 23);
             spinner.Start();
-            Console.SetCursorPosition(2, 27);
+            Console.SetCursorPosition(2, 23);
             foreach (string s in messages)
             {
                 Console.WriteLine(s);
@@ -89,7 +89,7 @@ namespace XRPLAirdrop
 
         public void InitScreen(params string[] messages)
         {
-            Console.SetCursorPosition(2, 27);
+            Console.SetCursorPosition(2, 23);
             foreach (string s in messages)
             {
                 Console.WriteLine(s);
@@ -103,7 +103,7 @@ namespace XRPLAirdrop
 
         public void WriteErrors(params string[] messages)
         {
-            int startPos = 28;
+            int startPos = 24;
             foreach (string s in messages)
             {
                 Console.SetCursorPosition(0, startPos);

@@ -1,0 +1,6 @@
+﻿
+1. Update Trustline Accounts                            6. Requeue Address                    11. Exit	
+2. Update XRPforensics data. deprecated on 1/1/22       7. View Current Network Fees
+3. View Current Settings                                8. Re-verify Failed Transaction Checks
+4. Start Airdrop                                        9. Issue New Currency
+5. Export Report                                        10. Blackhole Issuer Account												

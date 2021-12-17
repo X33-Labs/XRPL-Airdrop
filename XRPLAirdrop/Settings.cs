@@ -1,9 +1,19 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using XRPLAirdrop.Models;
 
 namespace XRPLAirdrop
 {
+    public class NewToken
+    {
+        public string coldWallet { get; set; }
+        public string coldWalletSecret { get; set; }
+        public string hotWallet { get; set; }
+        public string hotWalletSecret { get; set; }
+        public string tokenName { get; set; }
+        public long supply { get; set; }
+    }
     public class Settings
     {
         public string jsonUrl { get; set; }
@@ -26,6 +36,10 @@ namespace XRPLAirdrop
         public int maximumFee { get; set; }
         public bool xrplVerifyEnabled { get; set; }
         public string xrplVerifyPassword { get; set; }
+        public string issuerSecret { get; set; }
+        public long supply { get; set; }
+        public decimal transferFee { get; set; }
+        public string domain { get; set; }
         public Settings()
         {
             string jsonConfig = File.ReadAllText(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config/settings.json"));
@@ -35,7 +49,7 @@ namespace XRPLAirdrop
             issuerAddress = d.Issuer_Address;
             airdropAddress = d.Airdrop_Address;
             airdropSecret = d.Airdrop_Address_Secret;
-            currencyCode = d.Currency_Code;
+            currencyCode = Utils.AddZeros(Utils.ConvertHex(d.Currency_Code.Value), 40);
             airdropTokenAmt = d.Airdrop_Token_Amt;
             excludeBots = d.Exclude_Bots;
             xrpForensicsKey = d.XRPForensics_API_Key;
@@ -50,29 +64,10 @@ namespace XRPLAirdrop
             maximumFee = d.MaximumFee;
             xrplVerifyEnabled = d.XRPLVerify_Enabled;
             xrplVerifyPassword = d.XRLVerify_Password;
-        }
-
-        public static string ConvertHex(String hexString)
-        {
-            try
-            {
-                string ascii = string.Empty;
-
-                for (int i = 0; i < hexString.Length; i += 2)
-                {
-                    String hs = string.Empty;
-
-                    hs = hexString.Substring(i, 2);
-                    uint decval = System.Convert.ToUInt32(hs, 16);
-                    char character = System.Convert.ToChar(decval);
-                    ascii += character;
-
-                }
-
-                return ascii;
-            }
-            catch (Exception) { return ""; }
-
+            transferFee = d.TransferFee;
+            issuerSecret = d.Issuer_Address_Secret;
+            supply = d.Supply;
+            domain = d.Domain;
         }
     }
 }
