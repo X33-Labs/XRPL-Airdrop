@@ -437,7 +437,7 @@ namespace XRPLAirdrop
                 //Get Current Open Ledger Fee
                 uint currentLedgerFee = await xrpl.ReturnOpenLedgerFee(client);
                 uint sequence = await xrpl.GetLatestAccountSequence(client, config.issuerAddress);
-                Submit accountSetResult = await xrpl.AccountSet(client, config.issuerAddress, config.issuerSecret, 8, currentLedgerFee, sequence, config.domain);
+                Submit accountSetResult = await xrpl.AccountSet(client, config.issuerAddress, config.issuerSecret, 8, currentLedgerFee, sequence, config.domain, config.email);
                 if(accountSetResult.EngineResult == "tesSUCCESS" || accountSetResult.EngineResult == "terQUEUED")
                 {
                     //Valid Txn, Proceed
@@ -523,20 +523,24 @@ namespace XRPLAirdrop
                 decimal accountBalance = await xrpl.ReturnAccountBalance(client, config.issuerAddress);
                 if(accountBalance > 10)
                 {
-                    //Attempt to send XRP out to the airdrop wallet
-                    decimal amountToSend = accountBalance - 9;
-                    Submit txnResponse = await xrpl.SendPlainXRP(client, config.issuerAddress, config.issuerSecret, config.airdropAddress, sequence, (int)currentLedgerFee, amountToSend);
-                    //Valid Txn, Proceed
-                    //Wait for ledger close
-                    if (txnResponse.EngineResult == "tesSUCCESS" || txnResponse.EngineResult == "terQUEUED")
+                    //Attempt to send XRP out to the airdrop wallet. Keep 1 XRP for txn to set Regular Key and Disable Master Key
+                    decimal amountToSend = accountBalance - 11;
+                    if(amountToSend > Convert.ToDecimal(.001))
                     {
-                        Thread.Sleep(10000);
-                        //Confirm Txn
-                        if (!await xrpl.isValidTxn(client, txnResponse.Transaction.Hash))
+                        Submit txnResponse = await xrpl.SendPlainXRP(client, config.issuerAddress, config.issuerSecret, config.airdropAddress, sequence, (int)currentLedgerFee, amountToSend);
+                        //Valid Txn, Proceed
+                        //Wait for ledger close
+                        if (txnResponse.EngineResult == "tesSUCCESS" || txnResponse.EngineResult == "terQUEUED")
                         {
-                            throw new Exception("Txn Not valid.");
+                            Thread.Sleep(10000);
+                            //Confirm Txn
+                            if (!await xrpl.isValidTxn(client, txnResponse.Transaction.Hash))
+                            {
+                                throw new Exception("Txn Not valid.");
+                            }
                         }
-                    } else { throw new Exception(txnResponse.EngineResultMessage); }
+                        else { throw new Exception(txnResponse.EngineResultMessage); }
+                    }
                 }
 
 
@@ -578,6 +582,55 @@ namespace XRPLAirdrop
                     else { throw new Exception(disableMasterKeyResponse.EngineResultMessage); }
                 }
                 else { throw new Exception(accountSetRegularKeyResponse.EngineResultMessage); }
+
+
+            }
+            catch (Exception ex)
+            {
+                screen.ClearConsoleLines(24);
+                screen.WriteMessages("Error: " + ex.Message);
+                screen.Stop(ref spinner);
+                Console.ReadLine();
+            }
+        }
+
+        public async Task SetEmailHash()
+        {
+            screen.ClearConsoleLines();
+            screen.InitScreen(ref spinner, "");
+            IRippleClient client = new RippleClient(config.websockUrl);
+            client.Connect();
+            try
+            {
+
+                screen.ClearConsoleLines(24);
+                screen.WriteMessages("Setting Email Hash on Issuer Account...");
+
+                //Get Current Open Ledger Fee
+                uint currentLedgerFee = await xrpl.ReturnOpenLedgerFee(client);
+                uint sequence = await xrpl.GetLatestAccountSequence(client, config.issuerAddress);
+
+                Submit accountSetResult = await xrpl.AccountSet(client, config.issuerAddress, config.issuerSecret, 8, currentLedgerFee, sequence, config.domain, config.email);
+                if (accountSetResult.EngineResult == "tesSUCCESS" || accountSetResult.EngineResult == "terQUEUED")
+                {
+                    //Valid Txn, Proceed
+                    //Wait for ledger close
+                    Thread.Sleep(10000);
+                    //Confirm Txn
+                    if (!await xrpl.isValidTxn(client, accountSetResult.Transaction.Hash))
+                    {
+                        throw new Exception("Txn Not valid.");
+                    }
+
+                    //Success!!
+                    screen.ClearConsoleLines(24);
+                    screen.Stop(ref spinner);
+                    screen.WriteMessages("Issuer Account has been successfully updated!");
+                    Console.ReadLine();
+
+                }
+                else { throw new Exception(accountSetResult.EngineResultMessage); }
+
 
 
             }

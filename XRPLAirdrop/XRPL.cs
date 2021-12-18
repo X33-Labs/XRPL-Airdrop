@@ -15,9 +15,11 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using XRPLAirdrop.db.models;
+using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
 
 namespace XRPLAirdrop
 {
@@ -117,7 +119,7 @@ namespace XRPLAirdrop
             }
         }
 
-        public async Task<Submit> AccountSet(IRippleClient client, string account, string account_secret, uint setFlag, uint feeInDrops, uint sequence, string domain = "")
+        public async Task<Submit> AccountSet(IRippleClient client, string account, string account_secret, uint setFlag, uint feeInDrops, uint sequence, string domain = "", string email = "")
         {
             try
             {
@@ -128,9 +130,27 @@ namespace XRPLAirdrop
                 AccountSetTxn.Flags = 1048576;
                 AccountSetTxn.Fee = feeInDrops;
                 AccountSetTxn.Sequence = sequence;
-                AccountSetTxn.Domain = Utils.ConvertHex(domain);
+                if (domain != "")
+                {
+                    AccountSetTxn.Domain = Utils.ConvertHex(domain);
+                }
+                if(email != "")
+                {
+                    AccountSetTxn.EmailHash = Utils.CreateMD5(email);
+                }
 
-                string json = JsonConvert.SerializeObject(AccountSetTxn);
+                JObject j = JObject.Parse(JsonConvert.SerializeObject(AccountSetTxn));
+                if (j["Domain"].ToString() == "")
+                {
+                    j.Remove("Domain");
+                }
+                if (j["EmailHash"].ToString() == "")
+                {
+                    j.Remove("EmailHash");
+                }
+                j.ToString();
+
+                string json = j.ToString();
                 TxSigner signer = TxSigner.FromSecret(account_secret);  //secret is not sent to server, offline signing only
                 SignedTx signedTx = signer.SignJson(JObject.Parse(json));
 
@@ -213,14 +233,25 @@ namespace XRPLAirdrop
         {
             try
             {
-                AccountSetTxn AccountSetTxn = new AccountSetTxn();
-                AccountSetTxn.TransactionType = "AccountSet";
-                AccountSetTxn.Account = account;
-                AccountSetTxn.SetFlag = 4;
-                AccountSetTxn.Fee = feeInDrops;
-                AccountSetTxn.Sequence = sequence;
+                AccountSetTxn accountSetTxn = new AccountSetTxn();
+                accountSetTxn.TransactionType = "AccountSet";
+                accountSetTxn.Account = account;
+                accountSetTxn.SetFlag = 4;
+                accountSetTxn.Fee = feeInDrops;
+                accountSetTxn.Sequence = sequence;
 
-                string json = JsonConvert.SerializeObject(AccountSetTxn);
+                JObject j = JObject.Parse(JsonConvert.SerializeObject(accountSetTxn));
+                if (j["Domain"].ToString() == "")
+                {
+                    j.Remove("Domain");
+                }
+                if (j["EmailHash"].ToString() == "")
+                {
+                    j.Remove("EmailHash");
+                }
+                j.ToString();
+
+                string json = j.ToString();
                 TxSigner signer = TxSigner.FromSecret(account_secret);  //secret is not sent to server, offline signing only
                 SignedTx signedTx = signer.SignJson(JObject.Parse(json));
 
@@ -454,6 +485,17 @@ namespace XRPLAirdrop
             public uint Fee { get; set; }
             public uint Sequence { get; set; }
             public string Domain { get; set; }
+            public string EmailHash { get; set; }
+        }
+
+        public class DisableMasterKeyObj
+        {
+            public string TransactionType { get; set; }
+            public string Account { get; set; }
+            public uint SetFlag { get; set; }
+            public uint Flags { get; set; }
+            public uint Fee { get; set; }
+            public uint Sequence { get; set; }
         }
 
         public class TrustSetTxn

@@ -118,6 +118,17 @@ namespace XRPLAirdrop
                             return true;
                     }
                 case "11":
+                    Console.WriteLine("*** Are you sure you want to do this? *** Y or N");
+                    switch (Console.ReadLine())
+                    {
+                        case "Y":
+                            await engine.SetEmailHash();
+                            return true;
+                        case "N":
+                            return true;
+                    }
+                    return true;
+                case "12":
                     return false;
                 default:
                     return true;

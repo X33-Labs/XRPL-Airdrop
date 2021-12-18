@@ -40,6 +40,7 @@ namespace XRPLAirdrop
         public long supply { get; set; }
         public decimal transferFee { get; set; }
         public string domain { get; set; }
+        public string email { get; set; }
         public Settings()
         {
             string jsonConfig = File.ReadAllText(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config/settings.json"));
@@ -68,6 +69,7 @@ namespace XRPLAirdrop
             issuerSecret = d.Issuer_Address_Secret;
             supply = d.Supply;
             domain = d.Domain;
+            email = d.Email;
         }
     }
 }
