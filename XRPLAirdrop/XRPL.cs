@@ -119,7 +119,7 @@ namespace XRPLAirdrop
             }
         }
 
-        public async Task<Submit> AccountSet(IRippleClient client, string account, string account_secret, uint setFlag, uint feeInDrops, uint sequence, string domain = "", string email = "")
+        public async Task<Submit> AccountSet(IRippleClient client, string account, string account_secret, uint setFlag, uint feeInDrops, uint sequence, string domain = "", string email = "", decimal transferRate = 0)
         {
             try
             {
@@ -130,6 +130,10 @@ namespace XRPLAirdrop
                 AccountSetTxn.Flags = 1048576;
                 AccountSetTxn.Fee = feeInDrops;
                 AccountSetTxn.Sequence = sequence;
+                if(transferRate > 0)
+                {
+                    AccountSetTxn.TransferRate = 1000000000 + (uint)Math.Round((1000000000 * (transferRate / 100)));
+                }
                 if (domain != "")
                 {
                     AccountSetTxn.Domain = Utils.ConvertHex(domain);
@@ -280,7 +284,12 @@ namespace XRPLAirdrop
 
                 decimal totalFreeXRP = account.AccountData.Balance.ValueAsNumber - 1000000;
 
-                AccountLines accountLines = await client.AccountLines(config.airdropAddress);
+                AccountLinesRequest req = new AccountLinesRequest(config.airdropAddress);
+                AccountLines accountLines = await client.AccountLines(req);
+                if(accountLines.TrustLines.Count == 0)
+                {
+                    throw new Exception("Error when trying to retrieve Trustlines on airdrop account.");
+                }
                 foreach (TrustLine line in accountLines.TrustLines)
                 {
                     if (line.Currency == config.currencyCode)
@@ -486,6 +495,12 @@ namespace XRPLAirdrop
             public uint Sequence { get; set; }
             public string Domain { get; set; }
             public string EmailHash { get; set; }
+            public uint TransferRate { get; set; }
+
+            public AccountSetTxn()
+            {
+                TransferRate = 0;
+            }
         }
 
         public class DisableMasterKeyObj

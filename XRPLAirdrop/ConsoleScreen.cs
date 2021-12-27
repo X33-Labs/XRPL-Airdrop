@@ -75,6 +75,16 @@ namespace XRPLAirdrop
             }
         }
 
+        public void WriteMessages(int startPos, params string[] messages)
+        {
+            foreach (string s in messages)
+            {
+                Console.SetCursorPosition(0, startPos);
+                Console.WriteLine(s);
+                startPos++;
+            }
+        }
+
         public void InitScreen(ref Spinner spinner, params string[] messages)
         {
             Console.SetCursorPosition(0, 23);

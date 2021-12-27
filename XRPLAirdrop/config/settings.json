@@ -1,15 +1,15 @@
 ﻿{
-  "WebSocket_URL": "wss://s.altnet.rippletest.net/", //Main Net: 	wss://s1.ripple.com/  wss://xrplcluster.com/ ws://xrplive.com:48212/   Test Net: wss://s.altnet.rippletest.net/
-  "Issuer_Address": "rnifMg3BfC3aKRRfSv9eiFYLKiFDr4hXRp", //Address that issued your token
+  "WebSocket_URL": "wss://s.altnet.rippletest.net/", //Main Net: 	wss://s1.ripple.com/  wss://xrplcluster.com/  Test Net: wss://s.altnet.rippletest.net/
+  "Issuer_Address": "rnJnnWdDqEsKuaNAo8yraUr59UMKem8bBy", //Address that issued your token
   "Issuer_Address_Secret": "", //Only Needed if Blackholing an issuer account KEEP THIS PRIVATE AND SAFE!
-  "Airdrop_Address": "r48sWuHoGAdh4cupwpYxxi7UHnDQoGeYNA", //Address that holds the tokens for your airdrop
+  "Airdrop_Address": "rJZGqBFUjmb6XPkyzGhxjAkByzK7wR9dBe", //Address that holds the tokens for your airdrop
   "Airdrop_Address_Secret": "", //Secret to the airdrop address. KEEP THIS PRIVATE AND SAFE!
-  "Currency_Code": "TEST123", //Name of your token
-  "Domain": "google.com", //Optional (Can be used when issuing a new currency)
-  "Email": "test@gmail.com", //Optional: Used when setting an image on a block explorer like bithomp. See: https://en.gravatar.com/
-  "Supply": 1000000000, //Supply of your token (only used when created a new token)
-  "TransferFee": 0, //Usually not applicable. Leave at 0 if unsure. TransferRate of your token in %
-  "Airdrop_Token_Amt": 10, //amount to send in each air drop txn
+  "Currency_Code": "NEWCOIN", //ticker symbol of your token
+  "Domain": "example@gmail.com", //Optional (Can be used when issuing a new currency)
+  "Email": "emailhere@gmail.com", //Optional: Used when setting an image on a block explorer like bithomp. See: https://en.gravatar.com/
+  "Supply": 100000000000000, //Supply of your token (only used when created a new token)
+  "TransferFee": 0, //Usually not applicable. Leave at 0 if unsure. TransferRate of your token in %, must be between 0 and 100
+  "Airdrop_Token_Amt": 1, //amount to send in each air drop txn
   "Exclude_Bots": false, //This will only work if you've pulled in the XRP Forensics data. Excludes Bots/Peel accounts. Contact for more info: https://xrplorer.com/contact
   "XRPForensics_URL": "https://api.xrplorer.com/custom/airdropfarmingaccounts", //deprecated on 1/1/22: Contact for more info: https://xrplorer.com/contact
   "XRPForensics_API_Key": "", //deprecated on 1/1/22: Contact for the API Key: https://xrplorer.com/contact
@@ -20,7 +20,8 @@
   "Include_only_holders_num_Tokens": 0, //Minimum number of tokens to hold in order to be eligible for the airdrop. Only used if Include_only_holders = true
   "Max_number_of_trustlines": 500, //Number of trustlines to airdrop to. 
   "FeeMultiplier": 1.1, //How many times above average fees to pay for reliable transactions
-  "MaximumFee": 5000, //Maximum number of drops willing to pay for each transaction
-  "XRPLVerify_Enabled": false,
-  "XRLVerify_Password": ""
+  "MaximumFee": 11, //Maximum number of drops willing to pay for each transaction
+  "XRPLVerify_Enabled": false, //Used to filter out bots/scripts. Go to www.xrplverify.com for more info
+  "XRLVerify_Password": "", //xrplverify password that was issued to you
+  "Report_Format": "CSV" //Select either CSV or XLSX
 }

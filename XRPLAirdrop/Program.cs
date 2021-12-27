@@ -83,7 +83,13 @@ namespace XRPLAirdrop
                     }
                     return true;
                 case "5":
-                    WorkSheetClass.GenerateExcelWorkSheet();
+                    if(config.reportExportFormat == "CSV")
+                    {
+                        WorkSheetClass.GenerateCSV();
+                    } else if (config.reportExportFormat == "XLSX")
+                    {
+                        WorkSheetClass.GenerateExcelWorkSheet();
+                    }
                     return true;
                 case "6":
                     Utils.RequeueAddress();

@@ -81,8 +81,8 @@ namespace XRPLAirdrop
                     {
                         while (Convert.ToInt32(Math.Floor(f.Drops.OpenLedgerFee * config.feeMultiplier)) > config.maximumFee)
                         {
-                            screen.ClearConsoleLines(28);
-                            screen.WriteMessages("Waiting...fees too high. Current Open Ledger Fee: " + f.Drops.OpenLedgerFee, "Fees configured based on fee multiplier: " + Convert.ToInt32(Math.Floor(f.Drops.MedianFee * config.feeMultiplier)));
+                            screen.ClearConsoleLines(24);
+                            screen.WriteMessages("Waiting...fees too high. Current Open Ledger Fee: " + f.Drops.OpenLedgerFee, "Fees configured based on fee multiplier: " + Convert.ToInt32(Math.Floor(f.Drops.OpenLedgerFee * config.feeMultiplier)), "Maximum Fee Configured: " + config.maximumFee);
                             Thread.Sleep(config.accountLinesThrottle * 1000);
                             //Get Current Fees
                             f = await client.Fees();
@@ -149,7 +149,7 @@ namespace XRPLAirdrop
                     }
                     Thread.Sleep(config.txnThrottle * 1000);
                     totalQueued--;
-                    screen.ClearConsoleLines(28);
+                    screen.ClearConsoleLines(24);
                     screen.WriteMessages("Queued Accounts: " + totalQueued, "Successful Transactions: " + countSuccess + "   Failed Transactions: " + countFailed);
 
                     //Verify once Txn count gets to 10
@@ -190,11 +190,12 @@ namespace XRPLAirdrop
         private static async Task<int> VerifyTransactions(IRippleClient client)
         {
             Queue<Airdrop> unVerifiedList = db.GetUnverifiedRecords(config);
+            int totalToVerify = unVerifiedList.Count;
             int retries = 0;
             try
             {
-                screen.ClearConsoleLines();
-                screen.WriteMessages("Verifying Transactions... ");
+                screen.ClearConsoleLines(24);
+                screen.WriteMessages("Verifying Transactions... ", "Total to Verify: " + totalToVerify);
                 //Wait a few seconds for ledger finality
                 Thread.Sleep(3000);
                 if (unVerifiedList.Count > 0)
@@ -207,6 +208,7 @@ namespace XRPLAirdrop
                             db.UpdateAirdropRecord(a.address, 1, 1, null);
                             unVerifiedList.Dequeue();
                             retries = 0;
+                            totalToVerify--;
                         } else
                         {
                             //Could not validate
@@ -219,7 +221,10 @@ namespace XRPLAirdrop
                             db.UpdateAirdropRecord(a.address, 1, -2, null);
                             unVerifiedList.Dequeue();
                             retries = 0;
+                            totalToVerify--;
                         }
+                        screen.ClearConsoleLines(25);
+                        screen.WriteMessages(25, "Total to Verify: " + totalToVerify);
                     } while (unVerifiedList.Count > 0);
                 }
             }
@@ -437,7 +442,7 @@ namespace XRPLAirdrop
                 //Get Current Open Ledger Fee
                 uint currentLedgerFee = await xrpl.ReturnOpenLedgerFee(client);
                 uint sequence = await xrpl.GetLatestAccountSequence(client, config.issuerAddress);
-                Submit accountSetResult = await xrpl.AccountSet(client, config.issuerAddress, config.issuerSecret, 8, currentLedgerFee, sequence, config.domain, config.email);
+                Submit accountSetResult = await xrpl.AccountSet(client, config.issuerAddress, config.issuerSecret, 8, currentLedgerFee, sequence, config.domain, config.email, config.transferFee);
                 if(accountSetResult.EngineResult == "tesSUCCESS" || accountSetResult.EngineResult == "terQUEUED")
                 {
                     //Valid Txn, Proceed

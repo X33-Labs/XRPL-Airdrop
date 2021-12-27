@@ -93,7 +93,8 @@ namespace XRPLAirdrop
 
                 screen.Stop(ref spinner);
                 screen.ClearConsoleLines();
-                screen.WriteMessages("Successfully Verified " + countVerified + " out of " + count + " total trustlines with XRPLVerify.com. Press any key to go back to the menu.");
+                int totalTrustlines = db.GetTotalAirdropRecords();
+                screen.WriteMessages("Successfully Verified " + countVerified + " out of " + totalTrustlines + " total trustlines with XRPLVerify.com. Press any key to go back to the menu.");
                 Console.ReadLine();
 
             }
