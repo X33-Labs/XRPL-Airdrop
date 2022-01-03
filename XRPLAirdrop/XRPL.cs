@@ -452,7 +452,13 @@ namespace XRPLAirdrop
             {
                 if (line.Currency == config.currencyCode)
                 {
-                    trustlines.Add(new Airdrop { address = line.Account, dropped = 0, txn_verified = 0, datetime = 0, balance = Convert.ToDecimal(line.Balance) * -1 });
+                    //Wrap in try for tiny balance bug
+                    try
+                    {
+                        trustlines.Add(new Airdrop { address = line.Account, dropped = 0, txn_verified = 0, datetime = 0, balance = Convert.ToDecimal(line.Balance) * -1 });
+                    } catch(Exception) {
+                        trustlines.Add(new Airdrop { address = line.Account, dropped = 0, txn_verified = 0, datetime = 0, balance = 0 });
+                    }
                 }
             }
             returnObj.trustlines = trustlines;
