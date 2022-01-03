@@ -566,7 +566,7 @@ namespace XRPLAirdrop
                     screen.ClearConsoleLines(24);
                     screen.WriteMessages("Blackholing Issuer Account...Step 2: Disabling MasterKey");
                     sequence = await xrpl.GetLatestAccountSequence(client, config.issuerAddress);
-                    Submit disableMasterKeyResponse = await xrpl.DisableMasterKey(client, config.issuerAddress, config.issuerSecret, currentLedgerFee, sequence);
+                    Submit disableMasterKeyResponse = await xrpl.DisableMasterKey(client, config.issuerAddress, config.issuerSecret, currentLedgerFee, sequence, config.transferFee);
                     if (disableMasterKeyResponse.EngineResult == "tesSUCCESS" || disableMasterKeyResponse.EngineResult == "terQUEUED")
                     {
                         //Valid Txn, Proceed

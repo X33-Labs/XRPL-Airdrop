@@ -233,7 +233,7 @@ namespace XRPLAirdrop
             }
         }
 
-        public async Task<Submit> DisableMasterKey(IRippleClient client, string account, string account_secret,uint feeInDrops, uint sequence)
+        public async Task<Submit> DisableMasterKey(IRippleClient client, string account, string account_secret,uint feeInDrops, uint sequence, decimal transferRate = 0)
         {
             try
             {
@@ -243,6 +243,10 @@ namespace XRPLAirdrop
                 accountSetTxn.SetFlag = 4;
                 accountSetTxn.Fee = feeInDrops;
                 accountSetTxn.Sequence = sequence;
+                if (transferRate > 0)
+                {
+                    accountSetTxn.TransferRate = 1000000000 + (uint)Math.Round((1000000000 * (transferRate / 100)));
+                }
 
                 JObject j = JObject.Parse(JsonConvert.SerializeObject(accountSetTxn));
                 if (j["Domain"].ToString() == "")

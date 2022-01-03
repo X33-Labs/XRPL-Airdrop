@@ -1,13 +1,13 @@
 ﻿{
-  "WebSocket_URL": "wss://s.altnet.rippletest.net/", //Main Net: 	wss://s1.ripple.com/  wss://xrplcluster.com/  Test Net: wss://s.altnet.rippletest.net/
-  "Issuer_Address": "rnJnnWdDqEsKuaNAo8yraUr59UMKem8bBy", //Address that issued your token
+  "WebSocket_URL": "wss://s1.ripple.com/", //Main Net: 	wss://s1.ripple.com/  wss://xrplcluster.com/  Test Net: wss://s.altnet.rippletest.net/
+  "Issuer_Address": "rB1Q2FHZF9FnpFai5SrqJkWpdY2BAs3q3w", //Address that issued your token
   "Issuer_Address_Secret": "", //Only Needed if Blackholing an issuer account KEEP THIS PRIVATE AND SAFE!
-  "Airdrop_Address": "rJZGqBFUjmb6XPkyzGhxjAkByzK7wR9dBe", //Address that holds the tokens for your airdrop
+  "Airdrop_Address": "r3zUgr7YsA2BLp1zUqgFTmwbkJgYz578Fo", //Address that holds the tokens for your airdrop
   "Airdrop_Address_Secret": "", //Secret to the airdrop address. KEEP THIS PRIVATE AND SAFE!
-  "Currency_Code": "NEWCOIN", //ticker symbol of your token
-  "Domain": "example@gmail.com", //Optional (Can be used when issuing a new currency)
-  "Email": "emailhere@gmail.com", //Optional: Used when setting an image on a block explorer like bithomp. See: https://en.gravatar.com/
-  "Supply": 100000000000000, //Supply of your token (only used when created a new token)
+  "Currency_Code": "XEXAMPLE", //ticker symbol of your token
+  "Domain": "yourdomain.com", //Optional (Can be used when issuing a new currency)
+  "Email": "email@gmail.com", //Optional: Used when setting an image on a block explorer like bithomp. See: https://en.gravatar.com/
+  "Supply": 10000, //Supply of your token (only used when created a new token)
   "TransferFee": 0, //Usually not applicable. Leave at 0 if unsure. TransferRate of your token in %, must be between 0 and 100
   "Airdrop_Token_Amt": 1, //amount to send in each air drop txn
   "Exclude_Bots": false, //This will only work if you've pulled in the XRP Forensics data. Excludes Bots/Peel accounts. Contact for more info: https://xrplorer.com/contact
@@ -18,7 +18,7 @@
   "Exclude_if_user_has_a_balance": false, //This excludes accounts that already hold a balance of the token (good for filtering out team wallet trustlines)
   "Include_only_holders": false, //This setting if true will only airdrop if the user holds a balance. cannot use EXCLUDE_IF_USER_HAS_A_BALANCE and INCLUDE_ONLY_IF_HOLDER interchangably. one has to be true and the other has to be false.
   "Include_only_holders_num_Tokens": 0, //Minimum number of tokens to hold in order to be eligible for the airdrop. Only used if Include_only_holders = true
-  "Max_number_of_trustlines": 500, //Number of trustlines to airdrop to. 
+  "Max_number_of_trustlines": 10000, //Number of trustlines to airdrop to. 
   "FeeMultiplier": 1.1, //How many times above average fees to pay for reliable transactions
   "MaximumFee": 11, //Maximum number of drops willing to pay for each transaction
   "XRPLVerify_Enabled": false, //Used to filter out bots/scripts. Go to www.xrplverify.com for more info
