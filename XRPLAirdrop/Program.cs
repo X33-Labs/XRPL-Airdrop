@@ -22,9 +22,18 @@ namespace XRPLAirdrop
             spinner = new Spinner(0, 23);
             engine = new AirdropEngine(config, spinner);
             verify = new Verify(config, spinner);
+            tryCreateDirectories();
             while (showMenu)
             {
                 showMenu = await MainMenuAsync();
+            }
+        }
+
+        private static void tryCreateDirectories()
+        {
+            if(!Directory.Exists(Environment.CurrentDirectory + "\\Reports"))
+            {
+                System.IO.Directory.CreateDirectory(Environment.CurrentDirectory + "\\Reports");
             }
         }
 

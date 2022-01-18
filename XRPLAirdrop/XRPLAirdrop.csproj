@@ -41,8 +41,4 @@
     <Folder Include="Reports\" />
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if not exist &quot;$(TargetDir)Reports&quot; mkdir &quot;$(TargetDir)Reports&quot;" />
-  </Target>
-
 </Project>
