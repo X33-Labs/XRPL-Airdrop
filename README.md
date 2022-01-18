@@ -48,10 +48,10 @@ dotnet XRPLAirdrop.dll
 ## Tool Feature instructions
 
 ### 1. Update Trustline Accounts
-When this feature is initiated, the app will attempt to pull into local storage all of the addresses/balances that have a trustline setup with the configured issuer address that was set in the settings.json file. This is the 1st step that must be taken in order to run an airdrop campaign. It's also useful for taking snapshots of trustline accounts at a certain point in time or viewing account balances for your token. ***If an airdrop campaign has already been initiated, DO NOT update trustline accounts as it will overwrite all airdrop statuses and data.
+When this feature is initiated, the app will attempt to pull into local storage all of the addresses/balances that have a trustline setup with the configured issuer address that was set in the settings.json file. This is the 1st step that must be taken in order to run an airdrop campaign. It's also useful for taking snapshots of trustline accounts at a certain point in time or viewing account balances for your token. ***If an airdrop campaign has already been initiated, DO NOT update trustline accounts as it will overwrite all airdrop statuses and data.***
 
 ### 2. Update XRPForensics
-When this feature is initiated, the app will pull in Forensics data to identify Bots/Scripts/Trustline Farmers as provided by XRPlorer. Contact for more info: Xrplorer(https://xrplorer.com/contact) ***Deprecated as of 1/1/22
+When this feature is initiated, the app will pull in Forensics data to identify Bots/Scripts/Trustline Farmers as provided by XRPlorer. Contact for more info: Xrplorer(https://xrplorer.com/contact) ***Deprecated as of 1/1/22***
 
 ### 3. View Current Settings
 Outputs various trustline # stats and rudimentary settings data. Refer to the Settings.json file for all settings data.
@@ -117,13 +117,13 @@ Sets the transfer fee (as a percentage) for your new currency. Default is set to
 Amount of token to drop to each trustline
 
 ### Exclude_Bots
-Only used with XRPForensics data. Default is false. ***deprecated as of 1/1/22
+Only used with XRPForensics data. Default is false. ***deprecated as of 1/1/22***
 
 ### XRPForensics_URL
-URL for XRPlorer Bot data api. Do not change. ***deprecated as of 1/1/22
+URL for XRPlorer Bot data api. Do not change. ***deprecated as of 1/1/22***
 
 ### XRPForensics_API_Key
-The API Key for XRPlorer. Contact for more info: https://xrplorer.com/contact ***deprecated as of 1/1/22
+The API Key for XRPlorer. Contact for more info: https://xrplorer.com/contact ***deprecated as of 1/1/22***
 
 ### AccountLinesThrottle
 Throttle when pulling in trustlines to keep load to a minimum on ledger RPC servers. (in seconds)
