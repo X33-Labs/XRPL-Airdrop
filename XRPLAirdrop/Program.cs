@@ -144,6 +144,18 @@ namespace XRPLAirdrop
                     }
                     return true;
                 case "12":
+                    Console.WriteLine("*** Type the filename of the CSV (file must be located in the directory of the app) or type Enter to exit ***");
+                    string input = Console.ReadLine();
+                    switch (input)
+                    {
+                        case "":
+                            return true;
+                        default:
+                            engine.ImportCustomeList(input);
+                            return true;
+                    }
+                    return false;
+                case "13":
                     return false;
                 default:
                     return true;

@@ -647,5 +647,27 @@ namespace XRPLAirdrop
                 Console.ReadLine();
             }
         }
+
+        public void ImportCustomeList(string filename)
+        {
+            screen.ClearConsoleLines();
+            screen.InitScreen(ref spinner, " Processing Custom Address List...");
+            //Delete Trustline accounts first
+            db.DeleteTrustLines();
+            try
+            {
+                int count = db.ImportCustomList(filename);
+                spinner.Stop();
+                screen.ClearConsoleLines();
+                screen.WriteMessages("Custom list finished processing. Processed " + count + " into local storage.");
+                Console.ReadLine();
+            } catch(Exception ex)
+            {
+                spinner.Stop();
+                screen.ClearConsoleLines();
+                screen.WriteMessages(ex.Message);
+                Console.ReadLine();
+            }
+        }
     }
 }

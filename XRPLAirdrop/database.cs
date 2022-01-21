@@ -618,5 +618,49 @@ namespace XRPLAirdrop
 
             }
         }
+
+        public int ImportCustomList(string filename)
+        {
+            int count = 0;
+            try
+            {
+                using (var reader = new StreamReader(filename))
+                {
+                    List<string> accountList = new List<string>();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(',');
+
+                        foreach(string val in values)
+                        {
+                            if (!accountList.Contains(val) && val.Trim() != "")
+                            {
+                                accountList.Add(val.Trim());
+                                count++;
+                            }
+                        }
+                    }
+
+                    using (var conn = new System.Data.SQLite.SQLiteConnection(connectionstring))
+                    {
+                        conn.Open();
+                        foreach (string s in accountList)
+                        {
+                            var cmdInsert = new SQLiteCommand("Insert into Airdrop (address,balance) values (@address,0)", conn);
+                            cmdInsert.Parameters.Add(new SQLiteParameter("@address", s));
+                            cmdInsert.ExecuteNonQuery();
+
+                        }
+                        conn.Close();
+                    }
+                }
+                return count;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: " + ex.Message);
+            }
+        }
     }
 }
