@@ -154,7 +154,6 @@ namespace XRPLAirdrop
                             engine.ImportCustomeList(input);
                             return true;
                     }
-                    return false;
                 case "13":
                     return false;
                 default:
