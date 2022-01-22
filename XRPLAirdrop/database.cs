@@ -91,10 +91,11 @@ namespace XRPLAirdrop
                     conn.Open();
                     foreach (Airdrop a in adList)
                     {
-                        var cmdInsert = new SQLiteCommand("Insert into Airdrop (address,dropped,balance) values (@address,@dropped,@balance)", conn);
+                        var cmdInsert = new SQLiteCommand("Insert into Airdrop (address,dropped,balance,datetime) values (@address,@dropped,@balance,@datetime)", conn);
                         cmdInsert.Parameters.Add(new SQLiteParameter("@address", a.address));
                         cmdInsert.Parameters.Add(new SQLiteParameter("@dropped", a.dropped));
                         cmdInsert.Parameters.Add(new SQLiteParameter("@balance", a.balance));
+                        cmdInsert.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
                         cmdInsert.ExecuteNonQuery();
                     }
                     conn.Close();
@@ -179,7 +180,7 @@ namespace XRPLAirdrop
                         cmd.Parameters.Add(new SQLiteParameter("@detailTxnMessage", response.EngineResultMessage));
                         cmd.Parameters.Add(new SQLiteParameter("@address", address));
                         cmd.Parameters.Add(new SQLiteParameter("@txnHash", response.Transaction.Hash));
-                        cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.Now.ToUnixTimeSeconds()));
+                        cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
                     }
                     else
                     {
@@ -187,7 +188,7 @@ namespace XRPLAirdrop
                         cmd.Parameters.Add(new SQLiteParameter("@dropped", dropped));
                         cmd.Parameters.Add(new SQLiteParameter("@txnverified", txn_verified));
                         cmd.Parameters.Add(new SQLiteParameter("@address", address));
-                        cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.Now.ToUnixTimeSeconds()));
+                        cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
                     }
 
                     cmd.ExecuteNonQuery();
@@ -214,7 +215,7 @@ namespace XRPLAirdrop
                     cmd.Parameters.Add(new SQLiteParameter("@detailTxnMessage", response.EngineResultMessage));
                     cmd.Parameters.Add(new SQLiteParameter("@address", address));
                     cmd.Parameters.Add(new SQLiteParameter("@txnHash", response.Transaction.Hash));
-                    cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.Now.ToUnixTimeSeconds()));
+                    cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
                     cmd.ExecuteNonQuery();
                     conn.Close();
                 }
@@ -245,7 +246,7 @@ namespace XRPLAirdrop
                         cmd.Parameters.Add(new SQLiteParameter("@txnMessage", reason));
                         cmd.Parameters.Add(new SQLiteParameter("@detailTxnMessage", reason));
                         cmd.Parameters.Add(new SQLiteParameter("@txnHash", ""));
-                        cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.Now.ToUnixTimeSeconds()));
+                        cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
                         cmd.ExecuteNonQuery();
                     }
                     if (config.includeOnlyIfHolder)
@@ -255,7 +256,7 @@ namespace XRPLAirdrop
                         cmd.Parameters.Add(new SQLiteParameter("@txnMessage", reason));
                         cmd.Parameters.Add(new SQLiteParameter("@detailTxnMessage", reason));
                         cmd.Parameters.Add(new SQLiteParameter("@txnHash", ""));
-                        cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.Now.ToUnixTimeSeconds()));
+                        cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
                         cmd.ExecuteNonQuery();
                     }
                     if (config.xrplVerifyEnabled)
@@ -264,7 +265,7 @@ namespace XRPLAirdrop
                         cmd.Parameters.Add(new SQLiteParameter("@txnMessage", reason));
                         cmd.Parameters.Add(new SQLiteParameter("@detailTxnMessage", reason));
                         cmd.Parameters.Add(new SQLiteParameter("@txnHash", ""));
-                        cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.Now.ToUnixTimeSeconds()));
+                        cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
                         cmd.ExecuteNonQuery();
                     }
 
@@ -295,7 +296,7 @@ namespace XRPLAirdrop
                     cmd.Parameters.Add(new SQLiteParameter("@detailTxnMessage", ExceptionMsg));
                     cmd.Parameters.Add(new SQLiteParameter("@address", address));
                     cmd.Parameters.Add(new SQLiteParameter("@txnHash", ""));
-                    cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.Now.ToUnixTimeSeconds()));
+                    cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
                     cmd.ExecuteNonQuery();
                     conn.Close();
                 }
@@ -324,7 +325,7 @@ namespace XRPLAirdrop
                     cmd.Parameters.Add(new SQLiteParameter("@detailTxnMessage", response.EngineResultMessage));
                     cmd.Parameters.Add(new SQLiteParameter("@address", address));
                     cmd.Parameters.Add(new SQLiteParameter("@txnHash", response.Transaction.Hash));
-                    cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.Now.ToUnixTimeSeconds()));
+                    cmd.Parameters.Add(new SQLiteParameter("@datetime", DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
                     cmd.ExecuteNonQuery();
                     conn.Close();
                 }

@@ -331,6 +331,22 @@ namespace XRPLAirdrop
 
                 db.DeleteDuplicates();
                 db.RemoveAirdropAccount(config);
+                if (config.excludeBots)
+                {
+                    db.UpdateExclusionRecordsInAirdrop();
+                }
+                if (config.excludeIfUserHasABalance)
+                {
+                    db.UpdateFailureAirdrop("Excluded from airdrop. account already has a balance", config);
+                }
+                if (config.includeOnlyIfHolder)
+                {
+                    db.UpdateFailureAirdrop("Excluded from airdrop. account not holding enough of a balance", config);
+                }
+                if (config.xrplVerifyEnabled)
+                {
+                    db.UpdateFailureAirdrop("Excluded from airdrop. address was not verified through xrplverify.com", config);
+                }
                 screen.Stop(ref spinner);
                 screen.ClearConsoleLines();
                 if (!config.xrplVerifyEnabled || config.xrplVerifyPassword == "")
