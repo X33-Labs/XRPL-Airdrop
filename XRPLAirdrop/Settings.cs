@@ -51,7 +51,15 @@ namespace XRPLAirdrop
             issuerAddress = d.Issuer_Address;
             airdropAddress = d.Airdrop_Address;
             airdropSecret = d.Airdrop_Address_Secret;
-            currencyCode = Utils.AddZeros(Utils.ConvertHex(d.Currency_Code.Value), 40);
+            string currencyCodeVal = d.Currency_Code.Value;
+            if(currencyCodeVal.Length == 3)
+            {
+                currencyCode = d.Currency_Code.Value;
+            }
+            else
+            {
+                currencyCode = Utils.AddZeros(Utils.ConvertHex(d.Currency_Code.Value), 40);
+            }
             airdropTokenAmt = d.Airdrop_Token_Amt;
             excludeBots = d.Exclude_Bots;
             xrpForensicsKey = d.XRPForensics_API_Key;
