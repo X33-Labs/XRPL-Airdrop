@@ -13,6 +13,7 @@ using RippleDotNet.Requests.Transaction;
 using RippleDotNet.Responses.Transaction.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -298,7 +299,16 @@ namespace XRPLAirdrop
                 {
                     if (line.Currency == config.currencyCode)
                     {
-                        MaxNumberOfDrops = Convert.ToInt32(Math.Floor(Convert.ToDecimal(line.Balance) / Convert.ToDecimal(config.airdropTokenAmt)));
+                        Decimal bal;
+                        if(line.Balance.Contains("e-"))
+                        {
+                            bal = Decimal.Parse(line.Balance, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint);
+                        }
+                        else
+                        {
+                            bal = Convert.ToDecimal(line.Balance);
+                        }
+                        MaxNumberOfDrops = Convert.ToInt32(Math.Floor(bal / Convert.ToDecimal(config.airdropTokenAmt)));
                         break;
                     }
                 }
