@@ -1,27 +1,39 @@
 ﻿{
   "WebSocket_URL": "wss://s1.ripple.com/", //Main Net: 	wss://s1.ripple.com/  wss://xrplcluster.com/  Test Net: wss://s.altnet.rippletest.net/
-  "Issuer_Address": "rB1Q2FHZF9FnpFai5SrqJkWpdY2BAs3q3w", //Address that issued your token
+  "Issuer_Address": "", //Address that issued your token
   "Issuer_Address_Secret": "", //Only Needed if Blackholing an issuer account KEEP THIS PRIVATE AND SAFE!
-  "Airdrop_Address": "r3zUgr7YsA2BLp1zUqgFTmwbkJgYz578Fo", //Address that holds the tokens for your airdrop
+  "Airdrop_Address": "", //Address that holds the tokens for your airdrop
   "Airdrop_Address_Secret": "", //Secret to the airdrop address. KEEP THIS PRIVATE AND SAFE!
-  "Currency_Code": "XEXAMPLE", //ticker symbol of your token
+  "Currency_Code": "OAR", //ticker symbol of your token
+  "Standard_Currency_Code": false, //https://xrpl.org/currency-formats.html#standard-currency-codes
   "Domain": "yourdomain.com", //Optional (Can be used when issuing a new currency)
   "Email": "email@gmail.com", //Optional: Used when setting an image on a block explorer like bithomp. See: https://en.gravatar.com/
-  "Supply": 10000, //Supply of your token (only used when created a new token)
+  "Supply": 1373, //Supply of your token (only used when creating a new token OR when doing a proportional airdrop)
   "TransferFee": 0, //Usually not applicable. Leave at 0 if unsure. TransferRate of your token in %, must be between 0 and 100
-  "Airdrop_Token_Amt": 1, //amount to send in each air drop txn
+  "Airdrop": {
+    "Type": "proportional", //static or proportional
+    "Airdrop_Token_Amt": 1, //amount for static airdrop (Only used for static airdrops)
+    "Proportional_Amount_Of_Tokens": 33429000
+  },
+  "Exclusion_Wallets": [
+    "rEsptA6iXhBbmAjmnVkWG5fhvMjM3U2sDq",
+    "rH2nwFq3ZASXrmUJdKtLwpw2PPga9y1uL6",
+    "rpq53C6jk4gz1AvS47NBczFxUZiM6GS1D1",
+    "rEZzx8MJWGBevc65KAHjunUHr7hjruATeX",
+    "rBD57CbffrbJDV6KmkJ5E4vemBcNg1n7QQ"
+  ],
   "Exclude_Bots": false, //This will only work if you've pulled in the XRP Forensics data. Excludes Bots/Peel accounts. Contact for more info: https://xrplorer.com/contact
   "XRPForensics_URL": "https://api.xrplorer.com/custom/airdropfarmingaccounts", //deprecated on 1/1/22: Contact for more info: https://xrplorer.com/contact
   "XRPForensics_API_Key": "", //deprecated on 1/1/22: Contact for the API Key: https://xrplorer.com/contact
   "AccountLinesThrottle": 10, //Number of seconds between request calls. Recommended not to change. Lower settings could result in a block from web service hosts.
   "TxnThrottle": 1, //Number of seconds between request calls. Recommended not to change. Lower settings could result in a block from web service hosts.
   "Exclude_if_user_has_a_balance": false, //This excludes accounts that already hold a balance of the token (good for filtering out team wallet trustlines)
-  "Include_only_holders": false, //This setting if true will only airdrop if the user holds a balance. cannot use EXCLUDE_IF_USER_HAS_A_BALANCE and INCLUDE_ONLY_IF_HOLDER interchangably. one has to be true and the other has to be false.
-  "Include_only_holders_num_Tokens": 0, //Minimum number of tokens to hold in order to be eligible for the airdrop. Only used if Include_only_holders = true
-  "Max_number_of_trustlines": 10000, //Number of trustlines to airdrop to. 
-  "FeeMultiplier": 1.1, //How many times above average fees to pay for reliable transactions
-  "MaximumFee": 11, //Maximum number of drops willing to pay for each transaction
+  "Include_only_holders": true, //This setting if true will only airdrop if the user holds a balance. cannot use EXCLUDE_IF_USER_HAS_A_BALANCE and INCLUDE_ONLY_IF_HOLDER interchangably. one has to be true and the other has to be false.
+  "Include_only_holders_num_Tokens": 0.5, //Minimum number of tokens to hold in order to be eligible for the airdrop. Only used if Include_only_holders = true
+  "Max_number_of_trustlines": 600, //Number of trustlines to airdrop to. 
+  "FeeMultiplier": 1.5, //How many times above average fees to pay for reliable transactions
+  "MaximumFee": 30, //Maximum number of drops willing to pay for each transaction
   "XRPLVerify_Enabled": false, //Used to filter out bots/scripts. Go to www.xrplverify.com for more info
   "XRLVerify_Password": "", //xrplverify password that was issued to you
-  "Report_Format": "CSV" //Select either CSV or XLSX
+  "Report_Format": "XLSX" //Select either CSV or XLSX
 }

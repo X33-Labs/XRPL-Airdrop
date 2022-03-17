@@ -25,10 +25,23 @@ namespace XRPLAirdrop
                 Console.WriteLine("Total Trustline Records: " + totalAirdropRecords);
                 Console.WriteLine("Total Exclusion List Records: " + totalExclusionRecords);
                 Console.WriteLine(" ");
+                Console.WriteLine("Airdrop Type: " + config.airDropSettings.type);
+                if (config.airDropSettings.type == "proportional")
+                {
+                    DisplayProportionalAirdrop();
+                } else
+                {
+                    Console.WriteLine("Airdrop Amt per address: " + config.airDropSettings.airdropTokenAmt);
+                }
                 Console.WriteLine("Issuer Account: " + config.issuerAddress);
                 Console.WriteLine("Airdrop Account: " + config.airdropAddress);
-                Console.WriteLine("Airdrop Amt per address: " + config.airdropTokenAmt + " " + Utils.HexToAscii(config.currencyCode));
-                Console.WriteLine("Currency: " + config.currencyCode + "(" + Utils.HexToAscii(config.currencyCode) + ")");
+                if(config.standardCurrencyCode)
+                {
+                    Console.WriteLine("Currency: " + config.currencyCode);
+                } else
+                {
+                    Console.WriteLine("Currency: " + config.currencyCode + "(" + Utils.HexToAscii(config.currencyCode) + ")");
+                }
                 Console.WriteLine("Exclude Bots: " + config.excludeBots.ToString());
                 Console.WriteLine("Amount of Trustlines: " + config.numberOfTrustlines);
                 Console.WriteLine("Include Only Holders: " + config.includeOnlyIfHolder);
@@ -40,6 +53,12 @@ namespace XRPLAirdrop
             {
                 Console.WriteLine("Error: " + ex.Message);
             }
+        }
+
+        private void DisplayProportionalAirdrop()
+        {
+            decimal amountPerThreshold = Convert.ToDecimal(config.airDropSettings.proportionalAmount) / (config.supply / config.includeOnlyIfHolderThreshold);
+            Console.WriteLine("Amount Per threshold: " + amountPerThreshold.ToString());
         }
 
         public void ClearConsoleLines(int startingPosition = 23)

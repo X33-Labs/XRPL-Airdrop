@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using XRPLAirdrop.Models;
 
@@ -42,8 +43,12 @@ namespace XRPLAirdrop
         public string domain { get; set; }
         public string email { get; set; }
         public string reportExportFormat { get; set; }
+        public bool standardCurrencyCode { get; set; }
+        public AirdropSettings airDropSettings { get; set; }
+        public List<string> exlusionWallets { get; set; }
         public Settings()
         {
+            airDropSettings = new AirdropSettings();
             string jsonConfig = File.ReadAllText(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config/settings.json"));
             dynamic d = JObject.Parse(jsonConfig);
             jsonUrl = d.JSON_URL;
@@ -51,16 +56,15 @@ namespace XRPLAirdrop
             issuerAddress = d.Issuer_Address;
             airdropAddress = d.Airdrop_Address;
             airdropSecret = d.Airdrop_Address_Secret;
+            standardCurrencyCode = d.Standard_Currency_Code;
             string currencyCodeVal = d.Currency_Code.Value;
-            if(currencyCodeVal.Length == 3)
+            if(standardCurrencyCode)
             {
                 currencyCode = d.Currency_Code.Value;
-            }
-            else
+            } else
             {
                 currencyCode = Utils.AddZeros(Utils.ConvertHex(d.Currency_Code.Value), 40);
             }
-            airdropTokenAmt = d.Airdrop_Token_Amt;
             excludeBots = d.Exclude_Bots;
             xrpForensicsKey = d.XRPForensics_API_Key;
             xrpForensicsUrl = d.XRPForensics_URL;
@@ -80,6 +84,27 @@ namespace XRPLAirdrop
             domain = d.Domain;
             email = d.Email;
             reportExportFormat = d.Report_Format;
+
+            airDropSettings.type = d.Airdrop.Type;
+            airDropSettings.airdropTokenAmt = d.Airdrop.Airdrop_Token_Amt;
+            airDropSettings.proportionalAmount = d.Airdrop.Proportional_Amount_Of_Tokens;
+
+            try
+            {
+                exlusionWallets = new List<string>();
+                foreach (string s in d.Exclusion_Wallets)
+                {
+                    exlusionWallets.Add(s);
+                }
+            }
+            catch (Exception) { }
         }
+    }
+
+    public class AirdropSettings
+    {
+        public string type { get; set; }
+        public string airdropTokenAmt { get; set; }
+        public string proportionalAmount { get; set; }
     }
 }

@@ -551,6 +551,33 @@ namespace XRPLAirdrop
             }
         }
 
+        public void RemoveExclusionList(Settings config)
+        {
+            DateTime now = DateTime.Now;
+            try
+            {
+                using (var conn = new System.Data.SQLite.SQLiteConnection(connectionstring))
+                {
+                    conn.Open();
+                    foreach(string s in config.exlusionWallets)
+                    {
+                        var cmd = new SQLiteCommand("DELETE FROM Airdrop WHERE address = '" + s + "'", conn);
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+
+            }
+        }
+
         public void UpdateAlreadyDroppedMessage()
         {
             try

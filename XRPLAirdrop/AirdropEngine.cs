@@ -54,6 +54,7 @@ namespace XRPLAirdrop
                 {
                     db.UpdateFailureAirdrop("Excluded from airdrop. address was not verified through xrplverify.com", config);
                 }
+                db.RemoveExclusionList(config);
 
                 int MaxDropAmt = await xrpl.ReturnAmountToDrop();
                 if (MaxDropAmt < config.numberOfTrustlines)
@@ -90,7 +91,15 @@ namespace XRPLAirdrop
 
                         int feeInDrops = Convert.ToInt32(Math.Floor(f.Drops.OpenLedgerFee * config.feeMultiplier));
 
-                        Submit response = await xrpl.SendXRPPaymentAsync(client, a.address, sequence, feeInDrops, config.transferFee);
+                        Submit response = new Submit();
+                        if (config.airDropSettings.type == "static")
+                        {
+                            response = await xrpl.SendXRPPaymentAsync(client, a.address, sequence, feeInDrops, config.transferFee);
+                        } else if (config.airDropSettings.type == "proportional")
+                        {
+                            response = await xrpl.SendXRPPaymentProportionalAsync(client, a, sequence, feeInDrops, config.transferFee);
+                        }
+
                         //Transaction Node isn't Current. Wait for Network
                         if (response.EngineResult == "noCurrent" || response.EngineResult == "noNetwork")
                         {
@@ -99,11 +108,18 @@ namespace XRPLAirdrop
                             {
                                 //Throttle for node to catch up
                                 Thread.Sleep(config.txnThrottle * 3000);
-                                response = await xrpl.SendXRPPaymentAsync(client, a.address, sequence, feeInDrops);
+                                if (config.airDropSettings.type == "static")
+                                {
+                                    response = await xrpl.SendXRPPaymentAsync(client, a.address, sequence, feeInDrops, config.transferFee);
+                                }
+                                else if (config.airDropSettings.type == "proportional")
+                                {
+                                    response = await xrpl.SendXRPPaymentProportionalAsync(client, a, sequence, feeInDrops, config.transferFee);
+                                }
                                 retry++;
                             }
                         }
-                        else if (response.EngineResult == "tefPAST_SEQ")
+                        else if (response.EngineResult == "tefPAST_SEQ" || response.EngineResult == "temREDUNDANT" || response.EngineResult == "terPRE_SEQ")
                         {
                             //Get new account sequence + try again
                             sequence = await xrpl.GetLatestAccountSequence(client, config.airdropAddress);

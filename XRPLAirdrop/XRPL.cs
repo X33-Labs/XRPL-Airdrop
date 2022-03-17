@@ -13,6 +13,7 @@ using RippleDotNet.Requests.Transaction;
 using RippleDotNet.Responses.Transaction.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -67,12 +68,12 @@ namespace XRPLAirdrop
                 IPaymentTransaction paymentTransaction = new PaymentTransaction();
                 paymentTransaction.Account = config.airdropAddress;
                 paymentTransaction.Destination = destinationAddress;
-                paymentTransaction.Amount = new Currency { CurrencyCode = config.currencyCode, Issuer = config.issuerAddress, Value = config.airdropTokenAmt };
+                paymentTransaction.Amount = new Currency { CurrencyCode = config.currencyCode, Issuer = config.issuerAddress, Value = config.airDropSettings.airdropTokenAmt };
                 paymentTransaction.Sequence = sequence;
                 paymentTransaction.Fee = new Currency { CurrencyCode = "XRP", ValueAsNumber = feeInDrops };
                 if(transferFee > 0)
                 {
-                    paymentTransaction.SendMax = new Currency { CurrencyCode = config.currencyCode, Issuer = config.issuerAddress, Value = (config.airdropTokenAmt + (Convert.ToDecimal(config.airdropTokenAmt) * (transferFee / 100))).ToString() };
+                    paymentTransaction.SendMax = new Currency { CurrencyCode = config.currencyCode, Issuer = config.issuerAddress, Value = (config.airDropSettings.airdropTokenAmt + (Convert.ToDecimal(config.airdropTokenAmt) * (transferFee / 100))).ToString() };
                 }
 
                 TxSigner signer = TxSigner.FromSecret(config.airdropSecret);  //secret is not sent to server, offline signing only
@@ -90,6 +91,44 @@ namespace XRPLAirdrop
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<Submit> SendXRPPaymentProportionalAsync(IRippleClient client, Airdrop airdrop, uint sequence, int feeInDrops, decimal transferFee = 0)
+        {
+            try
+            {
+
+                decimal amountPerThreshold = Convert.ToDecimal(config.airDropSettings.proportionalAmount) / (config.supply / config.includeOnlyIfHolderThreshold);
+
+                //Calculate Amount to be dropped
+                decimal amountToDrop = Rounding.RoundDown((airdrop.balance / config.includeOnlyIfHolderThreshold) * amountPerThreshold, 5);
+
+                IPaymentTransaction paymentTransaction = new PaymentTransaction();
+                paymentTransaction.Account = config.airdropAddress;
+                paymentTransaction.Destination = airdrop.address;
+                paymentTransaction.Amount = new Currency { CurrencyCode = config.currencyCode, Issuer = config.issuerAddress, Value = amountToDrop.ToString() };
+                paymentTransaction.Sequence = sequence;
+                paymentTransaction.Fee = new Currency { CurrencyCode = "XRP", ValueAsNumber = feeInDrops };
+                if (transferFee > 0)
+                {
+                    paymentTransaction.SendMax = new Currency { CurrencyCode = config.currencyCode, Issuer = config.issuerAddress, Value = (amountToDrop.ToString() + (Convert.ToDecimal(config.airdropTokenAmt) * (transferFee / 100))).ToString() };
+                }
+
+                TxSigner signer = TxSigner.FromSecret(config.airdropSecret);  //secret is not sent to server, offline signing only
+                SignedTx signedTx = signer.SignJson(JObject.Parse(paymentTransaction.ToJson()));
+
+                SubmitBlobRequest request = new SubmitBlobRequest();
+                request.TransactionBlob = signedTx.TxBlob;
+
+                Submit result = await client.SubmitTransactionBlob(request);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
         public async Task<Submit> SendXRPPaymentAsync(IRippleClient client, string account, string account_secret, string destination, string issuer, long amount, string currency, uint feeInDrops, uint sequence)
         {
@@ -284,35 +323,65 @@ namespace XRPLAirdrop
             int MaxNumberOfDrops = 1;
             try
             {
-                AccountInfo account = await client.AccountInfo(config.airdropAddress);
-
-                decimal totalFreeXRP = account.AccountData.Balance.ValueAsNumber - 1000000;
-
-                AccountLinesRequest req = new AccountLinesRequest(config.airdropAddress);
-                AccountLines accountLines = await client.AccountLines(req);
-                if(accountLines.TrustLines.Count == 0)
+                if(config.airDropSettings.type == "static")
                 {
-                    throw new Exception("Error when trying to retrieve Trustlines on airdrop account.");
-                }
-                foreach (TrustLine line in accountLines.TrustLines)
-                {
-                    if (line.Currency == config.currencyCode)
+                    AccountInfo account = await client.AccountInfo(config.airdropAddress);
+
+                    decimal totalFreeXRP = account.AccountData.Balance.ValueAsNumber - 1000000;
+
+                    AccountLinesRequest req = new AccountLinesRequest(config.airdropAddress);
+                    AccountLines accountLines = await client.AccountLines(req);
+                    if (accountLines.TrustLines.Count == 0)
                     {
-                        MaxNumberOfDrops = Convert.ToInt32(Math.Floor(Convert.ToDecimal(line.Balance) / Convert.ToDecimal(config.airdropTokenAmt)));
-                        break;
+                        throw new Exception("Error when trying to retrieve Trustlines on airdrop account.");
                     }
-                }
+                    foreach (TrustLine line in accountLines.TrustLines)
+                    {
+                        if (line.Currency == config.currencyCode)
+                        {
+                            Decimal bal;
+                            if (line.Balance.Contains("e-"))
+                            {
+                                bal = Decimal.Parse(line.Balance, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint);
+                            }
+                            else
+                            {
+                                bal = Convert.ToDecimal(line.Balance);
+                            }
+                            MaxNumberOfDrops = Convert.ToInt32(Math.Floor(bal / Convert.ToDecimal(config.airdropTokenAmt)));
+                            break;
+                        }
+                    }
 
-                if (MaxNumberOfDrops > 1)
+                    if (MaxNumberOfDrops > 1)
+                    {
+                        //Check to make sure you have enough balance of XRP to send
+                        Fee feeObject = await client.Fees();
+                        int totalDropsPerTxn = Convert.ToInt32(Math.Ceiling(feeObject.Drops.OpenLedgerFee * config.feeMultiplier));
+                        int totalSafeTransactionsPossible = Convert.ToInt32(Math.Floor(totalFreeXRP / totalDropsPerTxn));
+                        if (MaxNumberOfDrops > totalSafeTransactionsPossible)
+                        {
+                            throw new Exception("Not enough XRP to send transactions");
+                        }
+                    }
+                } else if(config.airDropSettings.type == "proportional")
                 {
+                    database db = new database();
+                    Queue<Airdrop> airDropList = db.GetNonDroppedRecord(config);
+
+                    AccountInfo account = await client.AccountInfo(config.airdropAddress);
+
+                    decimal totalFreeXRP = account.AccountData.Balance.ValueAsNumber - 1000000;
+
                     //Check to make sure you have enough balance of XRP to send
                     Fee feeObject = await client.Fees();
                     int totalDropsPerTxn = Convert.ToInt32(Math.Ceiling(feeObject.Drops.OpenLedgerFee * config.feeMultiplier));
                     int totalSafeTransactionsPossible = Convert.ToInt32(Math.Floor(totalFreeXRP / totalDropsPerTxn));
-                    if (MaxNumberOfDrops > totalSafeTransactionsPossible)
+                    if (airDropList.Count > totalSafeTransactionsPossible)
                     {
                         throw new Exception("Not enough XRP to send transactions");
                     }
+                    MaxNumberOfDrops = airDropList.Count;
                 }
 
             }
