@@ -13,7 +13,8 @@ A Token Creation and Airdrop Tool Suite for the XRPL.
 
 ### Requirements
 
-+ [NodeJs and Git](https://nodejs.org/en/)
++ [NodeJs](https://nodejs.org/en/)
++ [Git](https://git-scm.com/downloads)
 + [.NET 5.0 Core Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/5.0)
 + [Visual Studio 2019 or greater](https://visualstudio.microsoft.com/downloads/) (Optional)
 
