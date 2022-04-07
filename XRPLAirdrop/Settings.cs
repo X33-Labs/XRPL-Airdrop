@@ -42,6 +42,7 @@ namespace XRPLAirdrop
         public string domain { get; set; }
         public string email { get; set; }
         public string reportExportFormat { get; set; }
+        public bool standardCurrencyCode { get; set; }
         public Settings()
         {
             string jsonConfig = File.ReadAllText(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config/settings.json"));
@@ -51,8 +52,9 @@ namespace XRPLAirdrop
             issuerAddress = d.Issuer_Address;
             airdropAddress = d.Airdrop_Address;
             airdropSecret = d.Airdrop_Address_Secret;
+            standardCurrencyCode = d.Standard_Currency_Code;
             string currencyCodeVal = d.Currency_Code.Value;
-            if(currencyCodeVal.Length == 3)
+            if(standardCurrencyCode)
             {
                 currencyCode = d.Currency_Code.Value;
             }

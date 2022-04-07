@@ -1,15 +1,16 @@
 ﻿{
   "WebSocket_URL": "wss://s1.ripple.com/", //Main Net: 	wss://s1.ripple.com/  wss://xrplcluster.com/  Test Net: wss://s.altnet.rippletest.net/
-  "Issuer_Address": "rB1Q2FHZF9FnpFai5SrqJkWpdY2BAs3q3w", //Address that issued your token
+  "Issuer_Address": "rE42R1mbjGtMzzFTL5aqpbTrj3TDVq71jo", //Address that issued your token
   "Issuer_Address_Secret": "", //Only Needed if Blackholing an issuer account KEEP THIS PRIVATE AND SAFE!
-  "Airdrop_Address": "r3zUgr7YsA2BLp1zUqgFTmwbkJgYz578Fo", //Address that holds the tokens for your airdrop
+  "Airdrop_Address": "rsSmMyfeGfAby3RDuQrTaQ1qcBU9xE7uFa", //Address that holds the tokens for your airdrop
   "Airdrop_Address_Secret": "", //Secret to the airdrop address. KEEP THIS PRIVATE AND SAFE!
-  "Currency_Code": "XEXAMPLE", //ticker symbol of your token
-  "Domain": "yourdomain.com", //Optional (Can be used when issuing a new currency)
-  "Email": "email@gmail.com", //Optional: Used when setting an image on a block explorer like bithomp. See: https://en.gravatar.com/
+  "Currency_Code": "PARC", //ticker symbol of your token
+  "Standard_Currency_Code": false,
+  "Domain": "", //Optional (Can be used when issuing a new currency)
+  "Email": "", //Optional: Used when setting an image on a block explorer like bithomp. See: https://en.gravatar.com/
   "Supply": 10000, //Supply of your token (only used when created a new token)
   "TransferFee": 0, //Usually not applicable. Leave at 0 if unsure. TransferRate of your token in %, must be between 0 and 100
-  "Airdrop_Token_Amt": 1, //amount to send in each air drop txn
+  "Airdrop_Token_Amt": 5000000, //amount to send in each air drop txn
   "Exclude_Bots": false, //This will only work if you've pulled in the XRP Forensics data. Excludes Bots/Peel accounts. Contact for more info: https://xrplorer.com/contact
   "XRPForensics_URL": "https://api.xrplorer.com/custom/airdropfarmingaccounts", //deprecated on 1/1/22: Contact for more info: https://xrplorer.com/contact
   "XRPForensics_API_Key": "", //deprecated on 1/1/22: Contact for the API Key: https://xrplorer.com/contact
@@ -23,5 +24,5 @@
   "MaximumFee": 11, //Maximum number of drops willing to pay for each transaction
   "XRPLVerify_Enabled": false, //Used to filter out bots/scripts. Go to www.xrplverify.com for more info
   "XRLVerify_Password": "", //xrplverify password that was issued to you
-  "Report_Format": "CSV" //Select either CSV or XLSX
+  "Report_Format": "XLSX" //Select either CSV or XLSX
 }
