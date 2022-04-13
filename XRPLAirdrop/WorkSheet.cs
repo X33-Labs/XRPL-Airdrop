@@ -11,9 +11,20 @@ namespace XRPLAirdrop
     public class WorkSheetClass
     {
         CultureInfo provider = CultureInfo.InvariantCulture;
-        public static void GenerateExcelWorkSheet()
+        private static Settings config;
+        public WorkSheetClass(Settings _config)
+        {
+            config = _config;
+        }
+
+        public void GenerateExcelWorkSheet()
         {
             database db = new database();
+
+            if (config.xrplVerifyEnabled)
+            {
+                db.UpdateFailureAirdrop("Excluded from airdrop. address was not verified through xrplverify.com", config);
+            }
             //Initialize ExcelEngine.
             using (ExcelPackage excel = new ExcelPackage())
             {
@@ -73,9 +84,14 @@ namespace XRPLAirdrop
             }
         }
 
-        public static void GenerateCSV()
+        public void GenerateCSV()
         {
             database db = new database();
+
+            if (config.xrplVerifyEnabled)
+            {
+                db.UpdateFailureAirdrop("Excluded from airdrop. address was not verified through xrplverify.com", config);
+            }
             //before your loop
             var csv = new StringBuilder();
 

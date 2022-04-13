@@ -92,12 +92,13 @@ namespace XRPLAirdrop
                     }
                     return true;
                 case "5":
-                    if(config.reportExportFormat == "CSV")
+                    WorkSheetClass ws = new WorkSheetClass(config);
+                    if (config.reportExportFormat == "CSV")
                     {
-                        WorkSheetClass.GenerateCSV();
+                        ws.GenerateCSV();
                     } else if (config.reportExportFormat == "XLSX")
                     {
-                        WorkSheetClass.GenerateExcelWorkSheet();
+                        ws.GenerateExcelWorkSheet();
                     }
                     return true;
                 case "6":
