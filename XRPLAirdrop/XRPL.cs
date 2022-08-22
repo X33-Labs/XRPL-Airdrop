@@ -44,6 +44,14 @@ namespace XRPLAirdrop
                 paymentTransaction.Amount = new Currency { ValueAsXrp = amount };
                 paymentTransaction.Sequence = sequence;
                 paymentTransaction.Fee = new Currency { CurrencyCode = "XRP", ValueAsNumber = feeInDrops };
+                if (config.airdropMemo.Trim() != "")
+                {
+                    paymentTransaction.Memos = new List<RippleDotNet.Model.Transaction.TransactionTypes.Memo>();
+                    var mem = new RippleDotNet.Model.Transaction.TransactionTypes.Memo();
+                    mem.Memo2 = new Memo2();
+                    mem.Memo2.MemoData = Utils.ConvertHex(config.airdropMemo);
+                    paymentTransaction.Memos.Add(mem);
+                }
 
                 TxSigner signer = TxSigner.FromSecret(account_secret);  //secret is not sent to server, offline signing only
                 SignedTx signedTx = signer.SignJson(JObject.Parse(paymentTransaction.ToJson()));
@@ -74,6 +82,14 @@ namespace XRPLAirdrop
                 if(transferFee > 0)
                 {
                     paymentTransaction.SendMax = new Currency { CurrencyCode = config.currencyCode, Issuer = config.issuerAddress, Value = (config.airDropSettings.airdropTokenAmt + (Convert.ToDecimal(config.airdropTokenAmt) * (transferFee / 100))).ToString() };
+                }
+                if (config.airdropMemo.Trim() != "")
+                {
+                    paymentTransaction.Memos = new List<RippleDotNet.Model.Transaction.TransactionTypes.Memo>();
+                    var mem = new RippleDotNet.Model.Transaction.TransactionTypes.Memo();
+                    mem.Memo2 = new Memo2();
+                    mem.Memo2.MemoData = Utils.ConvertHex(config.airdropMemo);
+                    paymentTransaction.Memos.Add(mem);
                 }
 
                 TxSigner signer = TxSigner.FromSecret(config.airdropSecret);  //secret is not sent to server, offline signing only
@@ -112,6 +128,14 @@ namespace XRPLAirdrop
                 {
                     paymentTransaction.SendMax = new Currency { CurrencyCode = config.currencyCode, Issuer = config.issuerAddress, Value = (amountToDrop.ToString() + (Convert.ToDecimal(config.airdropTokenAmt) * (transferFee / 100))).ToString() };
                 }
+                if (config.airdropMemo.Trim() != "")
+                {
+                    paymentTransaction.Memos = new List<RippleDotNet.Model.Transaction.TransactionTypes.Memo>();
+                    var mem = new RippleDotNet.Model.Transaction.TransactionTypes.Memo();
+                    mem.Memo2 = new Memo2();
+                    mem.Memo2.MemoData = Utils.ConvertHex(config.airdropMemo);
+                    paymentTransaction.Memos.Add(mem);
+                }
 
                 TxSigner signer = TxSigner.FromSecret(config.airdropSecret);  //secret is not sent to server, offline signing only
                 SignedTx signedTx = signer.SignJson(JObject.Parse(paymentTransaction.ToJson()));
@@ -141,6 +165,14 @@ namespace XRPLAirdrop
                 paymentTransaction.Sequence = sequence;
                 paymentTransaction.Amount = new Currency { CurrencyCode = currency, Issuer = issuer, Value = amount.ToString() };
                 paymentTransaction.Fee = new Currency { CurrencyCode = "XRP", ValueAsNumber = feeInDrops };
+                if (config.airdropMemo.Trim() != "")
+                {
+                    paymentTransaction.Memos = new List<RippleDotNet.Model.Transaction.TransactionTypes.Memo>();
+                    var mem = new RippleDotNet.Model.Transaction.TransactionTypes.Memo();
+                    mem.Memo2 = new Memo2();
+                    mem.Memo2.MemoData = Utils.ConvertHex(config.airdropMemo);
+                    paymentTransaction.Memos.Add(mem);
+                }
 
                 TxSigner signer = TxSigner.FromSecret(account_secret);  //secret is not sent to server, offline signing only
                 SignedTx signedTx = signer.SignJson(JObject.Parse(paymentTransaction.ToJson()));
@@ -323,8 +355,14 @@ namespace XRPLAirdrop
             int MaxNumberOfDrops = 1;
             try
             {
+
                 if(config.airDropSettings.type == "static")
                 {
+                    if (config.airDropSettings.airdropTokenAmt == null)
+                    {
+                        throw new Exception("Airdrop token amount needs to be set for static airdrops");
+                    }
+
                     AccountInfo account = await client.AccountInfo(config.airdropAddress);
 
                     decimal totalFreeXRP = account.AccountData.Balance.ValueAsNumber - 1000000;
@@ -348,7 +386,7 @@ namespace XRPLAirdrop
                             {
                                 bal = Convert.ToDecimal(line.Balance);
                             }
-                            MaxNumberOfDrops = Convert.ToInt32(Math.Floor(bal / Convert.ToDecimal(config.airdropTokenAmt)));
+                            MaxNumberOfDrops = Convert.ToInt32(Math.Floor(bal / Convert.ToDecimal(config.airDropSettings.airdropTokenAmt)));
                             break;
                         }
                     }

@@ -1,17 +1,17 @@
 ﻿{
-  "WebSocket_URL": "wss://s1.ripple.com/", //Main Net: 	wss://s1.ripple.com/  wss://xrplcluster.com/  Test Net: wss://s.altnet.rippletest.net/
-  "Issuer_Address": "", //Address that issued your token
+  "WebSocket_URL": "wss://s.altnet.rippletest.net/", //Main Net: 	wss://s1.ripple.com/  wss://xrplcluster.com/  Test Net: wss://s.altnet.rippletest.net/
+  "Issuer_Address": "r9Ku1EAKq91k7LQ81hTh5acU28KjHyHPTt", //Address that issued your token
   "Issuer_Address_Secret": "", //Only Needed if Blackholing an issuer account KEEP THIS PRIVATE AND SAFE!
-  "Airdrop_Address": "", //Address that holds the tokens for your airdrop
+  "Airdrop_Address": "rBqXTBWn4sLb6TfM2bqa3BQs6Km77FfKne", //Address that holds the tokens for your airdrop
   "Airdrop_Address_Secret": "", //Secret to the airdrop address. KEEP THIS PRIVATE AND SAFE!
-  "Currency_Code": "OAR", //ticker symbol of your token
+  "Currency_Code": "TESTCOIN", //ticker symbol of your token
   "Standard_Currency_Code": false, //https://xrpl.org/currency-formats.html#standard-currency-codes
-  "Domain": "yourdomain.com", //Optional (Can be used when issuing a new currency)
+  "Domain": "test@test.com", //Optional (Can be used when issuing a new currency)
   "Email": "email@gmail.com", //Optional: Used when setting an image on a block explorer like bithomp. See: https://en.gravatar.com/
-  "Supply": 1373, //Supply of your token (only used when creating a new token OR when doing a proportional airdrop)
+  "Supply": 10000, //Supply of your token (only used when creating a new token OR when doing a proportional airdrop)
   "TransferFee": 0, //Usually not applicable. Leave at 0 if unsure. TransferRate of your token in %, must be between 0 and 100
   "Airdrop": {
-    "Type": "proportional", //static or proportional
+    "Type": "static", //static or proportional
     "Airdrop_Token_Amt": 1, //amount for static airdrop (Only used for static airdrops)
     "Proportional_Amount_Of_Tokens": 33429000
   },
@@ -28,12 +28,13 @@
   "AccountLinesThrottle": 10, //Number of seconds between request calls. Recommended not to change. Lower settings could result in a block from web service hosts.
   "TxnThrottle": 1, //Number of seconds between request calls. Recommended not to change. Lower settings could result in a block from web service hosts.
   "Exclude_if_user_has_a_balance": false, //This excludes accounts that already hold a balance of the token (good for filtering out team wallet trustlines)
-  "Include_only_holders": true, //This setting if true will only airdrop if the user holds a balance. cannot use EXCLUDE_IF_USER_HAS_A_BALANCE and INCLUDE_ONLY_IF_HOLDER interchangably. one has to be true and the other has to be false.
+  "Include_only_holders": false, //This setting if true will only airdrop if the user holds a balance. cannot use EXCLUDE_IF_USER_HAS_A_BALANCE and INCLUDE_ONLY_IF_HOLDER interchangably. one has to be true and the other has to be false.
   "Include_only_holders_num_Tokens": 0.5, //Minimum number of tokens to hold in order to be eligible for the airdrop. Only used if Include_only_holders = true
   "Max_number_of_trustlines": 600, //Number of trustlines to airdrop to. 
   "FeeMultiplier": 1.5, //How many times above average fees to pay for reliable transactions
   "MaximumFee": 30, //Maximum number of drops willing to pay for each transaction
   "XRPLVerify_Enabled": false, //Used to filter out bots/scripts. Go to www.xrplverify.com for more info
   "XRLVerify_Password": "", //xrplverify password that was issued to you
-  "Report_Format": "XLSX" //Select either CSV or XLSX
+  "Report_Format": "XLSX", //Select either CSV or XLSX
+  "Airdrop_Memo": "Testing for an airdrop memo"
 }

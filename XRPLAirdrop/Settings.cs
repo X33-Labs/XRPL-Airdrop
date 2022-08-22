@@ -46,6 +46,7 @@ namespace XRPLAirdrop
         public bool standardCurrencyCode { get; set; }
         public AirdropSettings airDropSettings { get; set; }
         public List<string> exlusionWallets { get; set; }
+        public string airdropMemo { get; set; }
         public Settings()
         {
             airDropSettings = new AirdropSettings();
@@ -88,6 +89,7 @@ namespace XRPLAirdrop
             airDropSettings.type = d.Airdrop.Type;
             airDropSettings.airdropTokenAmt = d.Airdrop.Airdrop_Token_Amt;
             airDropSettings.proportionalAmount = d.Airdrop.Proportional_Amount_Of_Tokens;
+            airdropMemo = d.Airdrop_Memo;
 
             try
             {
